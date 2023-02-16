@@ -20,7 +20,6 @@ class UsersController {
             password: hashedPassword
         })
 
-
         return response.json();
     }
 
@@ -61,7 +60,6 @@ class UsersController {
 
         return response.json();
     }
-
 }
 
 
