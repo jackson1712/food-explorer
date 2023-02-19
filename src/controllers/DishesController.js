@@ -56,10 +56,31 @@ class DishesController {
         return response.json(dish);
     }
 
+    async index(request, response) {
+        const { name } = request.query;
+
+        let dishes;
+
+        if(name) {
+            dishes = await knex("dishes").select("*")
+            .whereLike("name", `%${name}%`).orderBy("price");
+        }else {
+            dishes = await knex("dishes").select("*").orderBy("price")
+        };
+
+        return response.json(dishes);
+    }
+
     async delete(request, response) {
         const { id } = request.params;
 
-        await knex("dishes").where({ id }).delete();
+        const deleted = await knex("dishes").where({ id }).delete();
+
+        if(!deleted) {
+            throw new AppError("Este prato não existe.")
+        }
+
+        // await knex("dishes").select(deleted).delete();
 
         return response.json();
     }
