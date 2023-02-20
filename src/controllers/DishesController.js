@@ -4,20 +4,27 @@ const knex = require("../database/knex");
 
 class DishesController {
     async create(request, response) {
-        const { name, description, price, category } = request.body;
+        const { name, description, price, category_name } = request.body;
 
-        const checkDish = await knex("dishes").where({ name }).first();
+        const checkDish = await knex("dishes").where({ name });
 
-        if (checkDish) {
+        if (checkDish.length > 0) {
             throw new AppError("Este prato já existe.")
+        }
+
+        const category = await knex("category").where({ name: category_name }).first();
+
+        if (!category) {
+            throw new AppError("Está categoria não existe")
         }
 
         await knex("dishes").insert({
             name,
             description,
-            price
-        })
-
+            price,
+            category_id: category.id
+        });
+        
         return response.status(200).json();
     }
 
@@ -65,9 +72,9 @@ class DishesController {
 
         if(name) {
             dishes = await knex("dishes").select("*")
-            .whereLike("name", `%${name}%`).orderBy("price");
+            .whereLike("name", `%${name}%`).orderBy("name");
         }else {
-            dishes = await knex("dishes").select("*").orderBy("price")
+            dishes = await knex("dishes").select("*").orderBy("name");
         };
 
         return response.json(dishes);
