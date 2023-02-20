@@ -30,7 +30,7 @@ class DishesController {
 
     async update(request, response) {
         const { id } = request.params;
-        const { name, description, price } = request.body;
+        const { name, description, price, category } = request.body;
 
         const dish = await knex("dishes").where({ id }).first();
 
