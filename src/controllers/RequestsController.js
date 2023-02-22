@@ -19,9 +19,9 @@ class RequestController {
     }
 
     async show(request, response) {
-        const { user_id } = request.params;
+        const { id } = request.params;
 
-        const dataRequest = await knex("requests").where({ user_id }).first();
+        const dataRequest = await knex("requests").where({ id }).first();
 
         if (!dataRequest) {
             throw new AppError("Esse pedido não existe, verifique o número.")
@@ -35,7 +35,7 @@ class RequestController {
             "items_requests.unit_price",
             "items_requests.total_price"
         ]).orderBy("total_price")
-        .where("requests.user_id", user_id)
+        .where("requests.id", id)
         .innerJoin("items_requests", "requests.id", "items_requests.request_id");
 
 

@@ -9,13 +9,13 @@ class DishesController {
         const checkDish = await knex("dishes").where({ name });
 
         if (checkDish.length > 0) {
-            throw new AppError("Este prato já existe.", 404)
+            throw new AppError("Este prato já existe.", 401)
         }
 
         const category = await knex("category").where({ name: category_name }).first();
 
         if (!category) {
-            throw new AppError("Está categoria não existe", 404)
+            throw new AppError("Está categoria não existe", 401)
         }
 
         await knex("dishes").insert({
@@ -60,7 +60,7 @@ class DishesController {
         const dish = await knex("dishes").where({ id }).first();
         
         if(!dish) {
-            throw new AppError("Este prato não existe")
+            throw new AppError("Este prato não existe", 404)
         }
 
         return response.json(dish);
@@ -90,7 +90,7 @@ class DishesController {
         const deleted = await knex("dishes").where({ id }).delete();
 
         if(!deleted) {
-            throw new AppError("Este prato não existe.")
+            throw new AppError("Este prato não existe.", 404)
         }
 
         // await knex("dishes").select(deleted).delete();
