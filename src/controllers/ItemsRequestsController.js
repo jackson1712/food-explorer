@@ -25,10 +25,44 @@ class ItemsRequestsController{
             dish_id: dish_id.id,
             unit_price: dish_id.price,
             total_price
-        })
+        }).groupBy("request_id");
 
         return response.json();
         
+    }
+
+    async update(request, response) {
+        const { id } = request.params;
+        const { amount, dish_id } = request.body;
+
+        const itemUpdate = await knex("items_requests").where({ id }).first();
+        const dishPrice = await knex("dishes").where({ id: dish_id }).first();
+
+        if (dishPrice.id) {
+            throw new AppError("Este item do pedido não existe.")
+        }
+
+        itemUpdate.dish_id = dish_id ?? itemUpdate.dish_id;
+        itemUpdate.amount = amount ?? itemUpdate.amount;
+        
+        const total_price = Number(amount * dishPrice.price);
+
+        await knex("items_requests").where({ id }).update({
+            dish_id: itemUpdate.dish_id,
+            amount: itemUpdate.amount,
+            unit_price: dishPrice.price,
+            total_price: total_price
+        })
+
+        return response.json();
+    }
+
+    async delete(request, response) {
+        const { id } = request.params;
+
+        await knex("items_requests").where({ id }).delete();
+
+        return response.json();
     }
 }
 
