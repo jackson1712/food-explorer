@@ -73,9 +73,9 @@ class DishesController {
 
         if(name) {
             dishes = await knex("dishes").select("*")
-            .whereLike("name", `%${name}%`).orderBy("name");
+            .whereLike("name", `%${name}%`).orderBy("price");
         }else {
-            dishes = await knex("dishes").select("*").orderBy("name");
+            dishes = await knex("dishes").select("*").orderBy("price");
         };
 
         return response.json(dishes);
