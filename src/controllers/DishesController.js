@@ -9,13 +9,13 @@ class DishesController {
         const checkDish = await knex("dishes").where({ name });
 
         if (checkDish.length > 0) {
-            throw new AppError("Este prato já existe.")
+            throw new AppError("Este prato já existe.", 404)
         }
 
         const category = await knex("category").where({ name: category_name }).first();
 
         if (!category) {
-            throw new AppError("Está categoria não existe")
+            throw new AppError("Está categoria não existe", 404)
         }
 
         await knex("dishes").insert({
@@ -36,7 +36,7 @@ class DishesController {
         const dish = await knex("dishes").where({ id }).first();
 
         if (!dish) {
-            throw new AppError("Este prato não existe.")
+            throw new AppError("Este prato não existe.", 404)
         }
 
         dish.name = name ?? dish.name;
@@ -67,15 +67,18 @@ class DishesController {
     }
 
     async index(request, response) {
-        const { name } = request.query;
+        const { name, ingredients } = request.query;
 
         let dishes;
 
-        if(name) {
+        if(ingredients) {
             dishes = await knex("dishes").select("*")
-            .whereLike("name", `%${name}%`).orderBy("price");
-        }else {
-            dishes = await knex("dishes").select("*").orderBy("price");
+            .whereLike("ingredients", `%${ingredients}%`).groupBy("ingredients").orderBy("price");
+        }else if(name) {
+            dishes = await knex("dishes").select("*")
+            .whereLike("name", `%${name}%`).groupBy("name").orderBy("price");
+        }else{
+            dishes = await knex("dishes").select("*")
         };
 
         return response.json(dishes);
