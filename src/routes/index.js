@@ -8,12 +8,17 @@ const requestsRoutes = require("./requests.routes");
 const categoryRoutes = require("./category.routes");
 const itemsRequestsRoutes = require("./items_requests.routes");
 
+const sessionsRoutes = require("./sessions.routes");
+
+
 routes.use("/users", usersRoutes);
 routes.use("/users", setIfUserIsAdminRoutes);
 routes.use("/dishes", dishesRoutes);
 routes.use("/requests", requestsRoutes);
 routes.use("/category", categoryRoutes);
 routes.use("/items_requests", itemsRequestsRoutes);
+
+routes.use("/sessions", sessionsRoutes);
 
 module.exports = routes;
 

@@ -3,7 +3,7 @@ const knex = require("../database/knex");
 
 class RequestController {
     async create(request, response) {
-        const { user_id } = request.params;
+        const user_id = request.user.id;
         
         await knex("requests").where({ user_id });
         

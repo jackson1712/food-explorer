@@ -3,10 +3,10 @@ const AppError = require("../utils/AppError")
 
 class SetIfUserIsAdminController {
     async update (request, response) {
-        const { id } = request.params;
+        const user_id = request.user.id;
         const { isAdmin } = request.body;
 
-        const checkUser = await knex("users").where({ id }).first();
+        const checkUser = await knex("users").where({ id: user_id }).first();
 
         if(!checkUser) {
             throw new AppError("Usuário não existe", 401)
@@ -14,7 +14,7 @@ class SetIfUserIsAdminController {
 
         checkUser.isAdmin = isAdmin ?? checkUser.isAdmin
 
-        await knex("users").where({ id }).update({
+        await knex("users").where({ id: user_id }).update({
             isAdmin: checkUser.isAdmin
         })
 

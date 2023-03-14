@@ -1,8 +1,12 @@
 const { Router } = require("express");
 const ItemsRequestsController = require("../controllers/ItemsRequestsController");
 
+const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
+
 const itemsRequestsRoutes = Router();
 const itemsRequestsController = new ItemsRequestsController();
+
+itemsRequestsRoutes.use(ensureAuthenticated);
 
 itemsRequestsRoutes.post("/:request_id", itemsRequestsController.create);
 itemsRequestsRoutes.put("/:id", itemsRequestsController.update);
