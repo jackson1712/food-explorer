@@ -4,18 +4,13 @@ const usersRoutes = Router();
 const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 
 const UsersController = require("../controllers/UsersController");
+const SetIfUserIsAdminController = require("../controllers/SetIfUserIsAdminController");
+
 const usersController = new UsersController();
+const setIfUserIsAdminController = new SetIfUserIsAdminController();
 
-// function myMiddleware(request, response, next) {
-//     if(!request.body.isAdmin) {
-//         return response.json({ message : "Não autorizado" })
-//     }
-
-//     next();
-// }
-
-
-usersRoutes.post("/", /*myMiddleware,*/ usersController.create);
+usersRoutes.post("/", usersController.create);
 usersRoutes.put("/", ensureAuthenticated, usersController.update);
+usersRoutes.patch("/", ensureAuthenticated, setIfUserIsAdminController.update);
 
 module.exports = usersRoutes;

@@ -2,7 +2,6 @@ const { Router } = require("express");
 const routes = Router();
 
 const usersRoutes = require("./users.routes");
-const setIfUserIsAdminRoutes = require("./setIfUserIsAdmin.routes");
 const dishesRoutes = require("./dishes.routes");
 const requestsRoutes = require("./requests.routes");
 const categoryRoutes = require("./category.routes");
@@ -12,7 +11,6 @@ const sessionsRoutes = require("./sessions.routes");
 
 
 routes.use("/users", usersRoutes);
-routes.use("/users", setIfUserIsAdminRoutes);
 routes.use("/dishes", dishesRoutes);
 routes.use("/requests", requestsRoutes);
 routes.use("/category", categoryRoutes);
