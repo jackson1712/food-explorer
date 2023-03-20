@@ -36,7 +36,7 @@ class DishesController {
         const dish = await knex("dishes").where({ id }).first();
 
         if (!dish) {
-            throw new AppError("Este prato não existe.", 404)
+            throw new AppError("Este prato não existe.", 404);
         }
 
         dish.name = name ?? dish.name;
