@@ -1,10 +1,10 @@
 const AppError = require("../utils/AppError");
 const knex = require("../database/knex");
 
-
 class DishesController {
     async create(request, response) {
         const { name, description, price, category_name, ingredients } = request.body;
+        const avatar_dish = request.file;
 
         const checkDish = await knex("dishes").where({ name });
 
@@ -22,6 +22,7 @@ class DishesController {
             name,
             description,
             price,
+            avatar_dish,
             category_id: category.id,
             ingredients
         });
