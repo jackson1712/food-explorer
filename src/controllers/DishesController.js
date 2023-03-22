@@ -1,10 +1,15 @@
 const AppError = require("../utils/AppError");
 const knex = require("../database/knex");
+const DiskStorage = require("../providers/DiskStorage");
+
+const diskStorage = new DiskStorage();
 
 class DishesController {
     async create(request, response) {
         const { name, description, price, category_name, ingredients } = request.body;
-        const avatar_dish = request.file;
+        const { filename: avatar_dish } = request.file;
+        
+        const filename = await diskStorage.saveFile(avatar_dish)
 
         const checkDish = await knex("dishes").where({ name });
 
@@ -22,7 +27,7 @@ class DishesController {
             name,
             description,
             price,
-            avatar_dish,
+            avatar_dish: filename,
             category_id: category.id,
             ingredients
         });

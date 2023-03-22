@@ -16,7 +16,7 @@ const imageDishController = new ImageDishController();
 
 dishesRoutes.use(ensureAuthenticated);
 
-dishesRoutes.post("/", dishesController.create);
+dishesRoutes.post("/", upload.single("avatar_dish"), dishesController.create);
 dishesRoutes.put("/:id", dishesController.update);
 dishesRoutes.patch("/:id", upload.single("avatar_dish"), imageDishController.update);
 dishesRoutes.get("/:id", dishesController.show);
