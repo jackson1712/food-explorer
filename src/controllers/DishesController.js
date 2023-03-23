@@ -22,15 +22,25 @@ class DishesController {
         if (!category) {
             throw new AppError("Está categoria não existe", 401)
         }
-
-        await knex("dishes").insert({
+        
+        const [dish_id] = await knex("dishes").insert({
             name,
             description,
             price,
             avatar_dish: filename,
             category_id: category.id,
-            ingredients
         });
+        
+        const ingredientsArray = ingredients.split(",");
+        
+        const ingredientsInsert = ingredientsArray.map(ingredient => {
+            return {
+                dish_id,
+                name: ingredient
+            }
+        })
+
+        await knex("ingredients").insert(ingredientsInsert).groupBy("dish_id").orderBy("name");
         
         return response.status(200).json();
     }
@@ -64,12 +74,16 @@ class DishesController {
         const { id } = request.params;
         
         const dish = await knex("dishes").where({ id }).first();
+        const ingredients = await knex("ingredients").where({ dish_id: id }).orderBy("name");
         
         if(!dish) {
             throw new AppError("Este prato não existe", 404)
         }
 
-        return response.json(dish);
+        return response.json({
+            ...dish,
+            ingredients
+        });
     }
 
     async index(request, response) {
