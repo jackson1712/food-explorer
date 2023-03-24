@@ -47,9 +47,13 @@ class DishesController {
 
     async update(request, response) {
         const { id } = request.params;
-        const { name, description, price, category } = request.body;
+        const { name, description, price, category_name, ingredients } = request.body;
+        const { filename: avatar_dish } = request.file;
+
+        const filename = await diskStorage.saveFile(avatar_dish);
 
         const dish = await knex("dishes").where({ id }).first();
+        const category = await knex("category").where({ name: category_name }).first();
 
         if (!dish) {
             throw new AppError("Este prato não existe.", 404);
@@ -58,14 +62,32 @@ class DishesController {
         dish.name = name ?? dish.name;
         dish.description = description ?? dish.description;
         dish.price = price ?? dish.price;
-        dish.category = category ?? dish.category;
+        dish.avatar_dish = filename ?? dish.avatar_dish;
 
         await knex("dishes").where({ id: dish.id }).update({
             name,
             description,
             price,
-            category
-        })
+            avatar_dish: filename,
+            category_id: category.id
+        });
+
+        const ingredientsList = ingredients.split(",");
+
+        for (let i = 0; i < ingredientsList.length; i++) {
+            const ingredient = ingredientsList[i];
+
+            if (ingredient.id) {
+                await knex("ingredients")
+                .where({ id: ingredient.id })
+                .update({ name: ingredient });
+            } else {
+                await knex("ingredients").insert({
+                    dish_id: dish.id,
+                    name: ingredient
+                });
+            }
+        }
 
         return response.json();
     }
