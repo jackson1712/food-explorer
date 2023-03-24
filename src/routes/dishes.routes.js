@@ -14,13 +14,12 @@ const dishesRoutes = Router();
 const dishesController = new DishesController();
 const imageDishController = new ImageDishController();
 
-dishesRoutes.use(ensureAuthenticated);
 
-dishesRoutes.post("/", upload.single("avatar_dish"), dishesController.create);
-dishesRoutes.put("/:id", dishesController.update);
-dishesRoutes.patch("/:id", upload.single("avatar_dish"), imageDishController.update);
+dishesRoutes.post("/", ensureAuthenticated, upload.single("avatar_dish"), dishesController.create);
+dishesRoutes.put("/:id", ensureAuthenticated, upload.single("avatar_dish"), dishesController.update);
+dishesRoutes.patch("/:id", ensureAuthenticated, upload.single("avatar_dish"), imageDishController.update);
 dishesRoutes.get("/:id", dishesController.show);
 dishesRoutes.get("/", dishesController.index);
-dishesRoutes.delete("/:id", dishesController.delete);
+dishesRoutes.delete("/:id", ensureAuthenticated, dishesController.delete);
 
 module.exports = dishesRoutes;
