@@ -72,6 +72,8 @@ class DishesController {
             category_id: category.id
         });
 
+        await knex("ingredients").where({ dish_id: dish.id}).delete();
+
         const ingredientsList = ingredients.split(",");
 
         for (let i = 0; i < ingredientsList.length; i++) {
@@ -134,8 +136,6 @@ class DishesController {
         if(!deleted) {
             throw new AppError("Este prato não existe.", 404)
         }
-
-        // await knex("dishes").select(deleted).delete();
 
         return response.json();
     }
