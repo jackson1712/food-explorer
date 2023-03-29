@@ -5,17 +5,13 @@ class RequestController {
     async create(request, response) {
         const user_id = request.user.id;
         
-        await knex("requests").where({ user_id });
-        
         if(!user_id) {
             throw new AppError("Se conecte para poder comprar.")
         }
 
-            await knex("requests").insert({
-                user_id,
-            });
-
-        return response.json();
+        const [id] = await knex("requests").insert({ user_id });
+        
+        return response.json(id);
     }
 
     async show(request, response) {
@@ -47,7 +43,7 @@ class RequestController {
 
         await knex("requests").where({ id }).delete();
 
-        return response.json();
+        return response.json(id);
     }
 }
 
