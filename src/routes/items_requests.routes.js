@@ -8,7 +8,7 @@ const itemsRequestsController = new ItemsRequestsController();
 
 itemsRequestsRoutes.use(ensureAuthenticated);
 
-itemsRequestsRoutes.post("/:request_id", itemsRequestsController.create);
+itemsRequestsRoutes.post("/", itemsRequestsController.create);
 itemsRequestsRoutes.put("/:id", itemsRequestsController.update);
 itemsRequestsRoutes.delete("/:id", itemsRequestsController.delete);
 
