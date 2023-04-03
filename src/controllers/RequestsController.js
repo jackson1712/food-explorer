@@ -38,6 +38,41 @@ class RequestController {
         return response.json({dataRequest, dataItemsRequest});
     }
 
+    async index(request, response) {
+
+        const orderAll = await knex("items_requests")
+        .select([
+            "requests.id",
+            "requests.created_at",
+            "requests.user_id"
+        ]).innerJoin("requests", "requests.id", "items_requests.request_id").groupBy("request_id");
+
+        const items_requests = await knex("items_requests")
+        .select([
+            "dish_id",
+            "amount",
+            "request_id"
+        ]);
+
+        const requestWithItem = await Promise.all(orderAll.map(async order => {
+            const items = await knex("items_requests")
+                .select([
+                    "dishes.name as dish_name",
+                    "items_requests.amount",
+                    "items_requests.request_id"
+                ])
+                .innerJoin("dishes", "dishes.id", "items_requests.dish_id")
+                .where("items_requests.request_id", order.id);
+        
+            return {
+                ...order,
+                items
+            };
+        }));
+
+        return response.json(requestWithItem);
+    }
+
     async delete(request, response) {
         const { id } = request.params;
 
