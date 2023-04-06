@@ -115,8 +115,13 @@ class DishesController {
 
     let dishes;
 
-    if(ingredients) {
-     const filterIngredients = ingredients.split(',').map(ingredient => ingredient.trim());
+    const filterIngredients = ingredients.split(',').map(ingredient => ingredient.trim());
+    const allIngredients = await knex("ingredients").select("*");
+    const names = allIngredients.map(item => item.name);
+
+    const checkIngredient = filterIngredients.every(ingredient => names.includes(ingredient));
+
+    if(checkIngredient) {
 
      dishes = await knex("ingredients")
      .select([
@@ -127,10 +132,9 @@ class DishesController {
         "dishes.price",
         "dishes.category_id",
      ])
-     .whereLike("dishes.name", `%${dish}%`)
      .whereIn("ingredients.name", filterIngredients)
      .innerJoin("dishes", "dishes.id", "ingredients.dish_id")
-    } else if (!ingredients && dish) {
+    } else if (!checkIngredient && dish) {
       dishes = await knex("dishes").select("*")
         .whereLike("name", `%${dish}%`)
         .orderBy("price");
