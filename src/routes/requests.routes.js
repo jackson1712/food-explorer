@@ -9,7 +9,9 @@ const requestController = new RequestController();
 requestsRoutes.use(ensureAuthenticated);
 
 requestsRoutes.post("/", requestController.create);
-requestsRoutes.get("/:id", requestController.show);
+requestsRoutes.get("/:user_id", requestController.show);
+requestsRoutes.get("/", requestController.index);
+requestsRoutes.patch("/:id", requestController.update);
 requestsRoutes.delete("/:id", requestController.delete);
 
 module.exports = requestsRoutes;
