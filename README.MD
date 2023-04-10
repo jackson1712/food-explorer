@@ -1,4 +1,4 @@
-# Food_Explorer- API 🍽️🍽️
+# Food_Explorer - API 🍽️🍽️
 
 - ***API from complete project of a fictitious restaurant, from creating/visualizing the dishes to choosing the payment method and finalizing purchases. Ordinary users can view and add the desired amount of dishes and finalize the order, being able to follow the status of the order while waiting. Administrators can add, edit or delete a dish whenever they want, uploading the image of the dish and its characteristics, in addition to having control of orders and being able to make changes to the status to keep updating the customer. Both have a favorites list, being able to add or remove a dish from that list at any time.***
 
