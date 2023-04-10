@@ -8,7 +8,7 @@ async function sqliteConnection() {
         driver: sqlite3.Database
     });
 
-    database.run('PRAGMA foreign_keys = ON')
+    database.run('PRAGMA foreign_keys = ON');
 
     return database;
 }
