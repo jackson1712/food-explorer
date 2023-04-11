@@ -2,23 +2,23 @@ const AppError = require("../utils/AppError");
 const { hash, compare } = require("bcrypt");
 const knex = require("../database/knex");
 
+const UserRepository = require("../repositories/UserRepository");
+
 class UsersController {
     async create(request, response) {
         const { email, name, password } = request.body;
 
-        const checkUserExists = await knex("users").where({ email }).first();
+        const userRepository = new UserRepository();
+
+        const checkUserExists = await userRepository.findByEmail(email);
 
         if(checkUserExists) {
-            throw new AppError("Este email já está sendo usado", 401)
+            throw new AppError("Este email já está sendo usado", 401);
         }
 
         const hashedPassword = await hash(password, 8);
 
-        await knex("users").insert({
-            name,
-            email,
-            password: hashedPassword
-        })
+        await userRepository.create({ name, email, password: hashedPassword });
 
         return response.json();
     }
