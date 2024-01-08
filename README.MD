@@ -47,10 +47,9 @@
 - Favorites - Create(Adiciona um prato e seus dados a uma lista de favoritos por meio do dish_id ou ID do prato para especificar o prato adicionado), Index(Mostra a lista dos pratos favoritos e seus dados por meio do ID do usuário, para filtrar apenas os favoritos do usuário autênticado/logado), Delete(Remove um prato e seus dados da lista de favoriros, filtrando por meio do ID do prato para remover apenas o prato especificado da lista).
 
 
-# importante
+# important
+To install the project's dependencies and start it running, run the "npm i" or "yarn i" command in the terminal. It is important to run this command to ensure that all required dependencies are installed correctly.
 
-- Para installar as dependências do projeto e inicializar seu funcionamento, execute o comando npm i ou yarn i no terminal. É importante executar esse comando para garantir que todas as dependências necessárias estejam instaladas corretamente.
+To initialize the database tables, run the "npm run migrate" command.
 
-- Para inicializar as tabelas do banco de dados execute o comando "npm run migrate".
-
-- Para realizar as requisições no insomnia é necessario usar nos parâmetros o seguinte endereço, http://localhost:3333/"nome da tabela" podendo ser [users, sessions, dishes, requests, items_requests, category, files, favorites] de acordo com a tabela que será feita a modificação.
+To make requests in insomnia it is necessary to use the following address in the parameters, http://localhost:3333/"table name" which can be [users, sessions, dishes, requests, items_requests, category, files, favorites] according to the table that will be modified.
